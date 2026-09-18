@@ -2,29 +2,38 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css";
 
 import imgRainbow from "./assets/rainboww.jpg";
-import musica from './assets/sons/musica';
+import musica from "./assets/sons/musica";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import BotoesControle from "./components/BotoesControle";
 import CapaMusica from "./components/CapaMusica";
 import SeletorFaixas from "./components/SeletorFaixas";
 import GerenciadorFaixa from "./components/GerenciadorFaixa";
 
 function App() {
+
   const [taTocando, setTocando] = useState(false);
   const [faixaAtual, setFaixaAtual] = useState(0);
   const tagAudio = useRef(null);
 
-  const infosLivro = {
+  useEffect(() => {
+    if(taTocando) {
+      tocarFaixa();
+    }
+  }, [
+    faixaAtual
+  ])
+
+  const infosAlbum = {
     nome: "Butterfly",
     autor: "Mariah Carey",
-    totalCap: 12,
+    totalFaixa: musica.length,
     capa: imgRainbow,
     faixas: musica,
     textoAlternativo: "Capa do álbum Butterfly de Mariah Carey",
   };
 
-  const tocarFaixa = () => {
+  function tocarFaixa() {
     tagAudio.current.play();
     setTocando(true);
   };
@@ -42,20 +51,46 @@ function App() {
     }
   };
 
+  const avancarFaixa = () => {
+    if (infosAlbum.totalFaixa === faixaAtual + 1) {
+      setFaixaAtual(0);
+    } else {
+      setFaixaAtual(faixaAtual + 1);
+    }
+  };
+
+  const retrocederFaixa = () => {
+    if (faixaAtual === 0) {
+      setFaixaAtual(infosAlbum.totalFaixa - 1);
+    } else {
+      setFaixaAtual(faixaAtual - 1);
+    }
+  };
+
+  const avancar15s = () => {
+    tagAudio.current.currentTime += 15
+  }
+
   return (
     <>
       <CapaMusica
-        imgCapa={infosLivro.capa}
-        textoAlternativo={infosLivro.textoAlternativo}
+        imgCapa={infosAlbum.capa}
+        textoAlternativo={infosAlbum.textoAlternativo}
       />
 
       <SeletorFaixas capAtual={faixaAtual + 1} />
 
-      <GerenciadorFaixa faixa={infosLivro.faixas[faixaAtual]} referencia={tagAudio}/>
+      <GerenciadorFaixa
+        faixa={infosAlbum.faixas[faixaAtual]}
+        referencia={tagAudio}
+      />
 
       <BotoesControle
         taTocando={taTocando}
         tocarOuPausarFaixa={tocarOuPausarFaixa}
+        avancarFaixa={avancarFaixa}
+        retrocederFaixa={retrocederFaixa}
+        avancar15s={avancar15s}
       />
     </>
   );
