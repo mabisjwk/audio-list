@@ -5,7 +5,7 @@ const BotoesControle = (props) => {
             <button onClick={props.retrocederFaixa}>
                 <i className="bi bi-skip-start"></i>
             </button>
-            <button >
+            <button onClick={props.retroceder15s}>
                 <i className="bi bi-arrow-counterclockwise"></i>
             </button>
             <button onClick={props.tocarOuPausarFaixa}>

@@ -71,6 +71,10 @@ function App() {
     tagAudio.current.currentTime += 15
   }
 
+  const retroceder15s = () => {
+    tagAudio.current.currentTime -= 15
+  }
+
   return (
     <>
       <CapaMusica
@@ -91,6 +95,7 @@ function App() {
         avancarFaixa={avancarFaixa}
         retrocederFaixa={retrocederFaixa}
         avancar15s={avancar15s}
+        retroceder15s={retroceder15s}
       />
     </>
   );
